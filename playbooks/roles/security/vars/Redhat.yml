@@ -1,0 +1,5 @@
+---
+security_pkgs:
+  - 'openssh-server'
+  - 'openssh-clients'
+  - 'openssl'

@@ -1,0 +1,7 @@
+---
+os_misc_pkgs:
+  - 'openntpd'
+  - 'apt-transport-https' # Needed for https repositories
+  - 'rsync'
+
+ntp_service: 'openntpd'

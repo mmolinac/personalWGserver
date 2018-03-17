@@ -1,0 +1,6 @@
+---
+openvpn_pkgs:
+  - 'openvpn'
+  - 'udev'
+
+openvpn_service: 'openvpn'

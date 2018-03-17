@@ -1,0 +1,40 @@
+---
+- name: Firewall software
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- action: >
+    {{ ansible_pkg_mgr }} name={{ item }} state=latest
+  with_items: "{{ firewall_pkgs }}"
+
+- name: Disable UFW logging
+  lineinfile:
+    dest: /etc/ufw/ufw.conf
+    regexp: "^LOGLEVEL"
+    line: "LOGLEVEL=off"
+
+- name: Change the default forward policy
+  lineinfile:
+    dest: /etc/default/ufw
+    regexp: "^DEFAULT_FORWARD_POLICY"
+    line: 'DEFAULT_FORWARD_POLICY="ACCEPT"'
+
+- name: Ensure UFW allows SSH
+  ufw:
+    to_port: "22"
+    proto:   "tcp"
+    rule:    "allow"
+
+- name: Ensure UFW is enabled and denies by default
+  ufw:
+    state:     "enabled"
+    policy:    "deny"
+    direction: "incoming"
+
+- name: Ensure UFW allows apache2
+  ufw:
+    to_port: "443"
+    proto:   "tcp"
+    rule:    "allow"

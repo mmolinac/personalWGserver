@@ -1,0 +1,44 @@
+---
+# VPN Configuration.
+#
+# Several recipes for this:
+# 1. https://www.digitalocean.com/community/questions/how-do-i-have-openvpn-and-ssl-https-for-domain-installed-on-the-same-droplet
+# sharing port 443 for OpenVPN and Apache SSL.
+# 2. http://bernaerts.dyndns.org/linux/75-debian/210-debian-sslh
+# sharing port 443 for OpenVPN, Apache SSL and SSH
+# 3. DPI: https://support.nvpn.net/Knowledgebase/Article/View/416/0/how-to-bypass-dpi-deep-packet-inspection
+#
+# Configure OpenVPN: https://openvpn.net/index.php/open-source/documentation/howto.html#install
+
+- name: OpenVPN packages
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+# Debian repository
+- apt_key:
+    url:   https://swupdate.openvpn.net/repos/repo-public.gpg
+    state: present
+  when: ( ansible_os_family == 'Debian' )
+
+- name: Official OpenVPN repository
+  apt_repository:
+    repo: 'deb https://build.openvpn.net/debian/openvpn/stable {{ ansible_lsb.codename }} main'
+    state: present
+    update_cache: yes
+
+- action: >
+    {{ ansible_pkg_mgr }} name={{ item }} state=latest
+  with_items: "{{ openvpn_pkgs }}"
+
+#
+# To be completed
+#
+# https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-debian-8
+# 
+# https://www.digitalocean.com/community/tutorials/how-to-setup-and-configure-an-openvpn-server-on-centos-7
+#
+
+- name: OpenVPN service  
+  service: name="{{ openvpn_service }}" enabled=yes state=started

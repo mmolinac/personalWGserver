@@ -1,0 +1,10 @@
+---
+- name: Ensuring that security packages are up to date
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- action: >
+    {{ ansible_pkg_mgr }} name={{ item }} state=latest
+  with_items: "{{ security_pkgs }}"

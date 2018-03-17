@@ -1,0 +1,14 @@
+---
+- name: OS misc packages
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- action: >
+    {{ ansible_pkg_mgr }} name={{ item }} state=latest update_cache=yes
+  with_items: "{{ os_misc_pkgs }}"
+
+- name: NTP service  
+  service: name="{{ ntp_service }}" enabled=yes state=started
+  become: yes
