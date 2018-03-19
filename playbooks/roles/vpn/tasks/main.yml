@@ -8,12 +8,21 @@
 # sharing port 443 for OpenVPN, Apache SSL and SSH
 # 3. DPI: https://support.nvpn.net/Knowledgebase/Article/View/416/0/how-to-bypass-dpi-deep-packet-inspection
 #
+# https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-debian-8
+# https://www.digitalocean.com/community/tutorials/how-to-setup-and-configure-an-openvpn-server-on-centos-7
+#
+# THIS:
 # Configure OpenVPN: https://openvpn.net/index.php/open-source/documentation/howto.html#install
 
 - name: OpenVPN packages
   include_vars: "{{ item }}"
   with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    # Ubuntu-16, Debian-9, CentOS-6
+    - "{{ ansible_distribution }}.yml"
+    # Ubuntu, Debian, CentOS
     - "{{ ansible_os_family }}.yml"
+    # Debian, RedHat
     - "default.yml"
 
 # Debian repository
@@ -27,18 +36,54 @@
     repo: 'deb https://build.openvpn.net/debian/openvpn/stable {{ ansible_lsb.codename }} main'
     state: present
     update_cache: yes
-
+  when: ( ansible_os_family == 'Debian' )
+  
 - action: >
     {{ ansible_pkg_mgr }} name={{ item }} state=latest
   with_items: "{{ openvpn_pkgs }}"
 
-#
-# To be completed
-#
-# https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-debian-8
-# 
-# https://www.digitalocean.com/community/tutorials/how-to-setup-and-configure-an-openvpn-server-on-centos-7
-#
+- name: OpenVPN easy-rsa folder
+  shell: "cp -rp {{ item.src }} {{ item.dest }}"
+  args:
+    creates: "{{ item.creates }}"
+  with_items: "{{ openvpn_easyrsa_folder }}"
+
+- name: OpenVPN templates
+  template:
+    src:   "{{ item.src }}"
+    dest:  "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode:  "{{ item.mode }}"
+  notify:  "{{ item.notify | default(omit) }}"
+  with_items: "{{ openvpn_templates }}"
+
+- name: OpenVPN CA files
+  shell: "{{ item.shell }}"
+  args:
+    chdir: "{{ item.chdir }}"
+    creates: "{{ item.creates }}"
+    executable: "{{ item.executable }}"
+  notify: "{{ item.notify | default(omit) }}"
+  with_items: "{{ openvpn_ca }}"
+
+- name: OpenVPN server keys
+  shell: "{{ item.shell }}"
+  args:
+    chdir: "{{ item.chdir }}"
+    creates: "{{ item.creates }}"
+    executable: "{{ item.executable }}"
+  notify: "{{ item.notify | default(omit) }}"
+  with_items: "{{ openvpn_server }}"
+
+- name: OpenVPN Diffie-Hellman parameters generation (lengthy operation)
+  shell: "{{ item.shell }}"
+  args:
+    chdir: "{{ item.chdir }}"
+    creates: "{{ item.creates }}"
+    executable: "{{ item.executable }}"
+  notify: "{{ item.notify | default(omit) }}"
+  with_items: "{{ openvpn_dh }}"
 
 - name: OpenVPN service  
   service: name="{{ openvpn_service }}" enabled=yes state=started

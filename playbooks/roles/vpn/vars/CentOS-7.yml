@@ -1,0 +1,71 @@
+---
+# To be done
+openvpn_pkgs:
+  - 'openvpn'
+  - 'easy-rsa'
+  - 'opensc'
+
+openvpn_service: 'openvpn@server'
+
+openvpn_templates:
+  - name:  "{{ openvpn_config }}/server.conf"
+    src:   'RedHat/openvpn.server.conf.j2'
+    dest:  "{{ openvpn_config }}/server.conf"
+    owner: 'root'
+    group: 'root'
+    mode:  '0600'
+    notify:
+      - restart openvpn
+  - name:  "{{ openvpn_config }}/vars"
+    src:   'RedHat/vars.j2'
+    dest:  "{{ openvpn_config }}/vars"
+    owner: 'root'
+    group: 'root'
+    mode:  '0644'
+    notify:
+      - restart openvpn
+
+openvpn_easyrsa_cmd: 'easyrsa'
+
+openvpn_easyrsa_folder:
+  - src:     '/usr/share/easy-rsa/3/*'
+    dest:    "{{ openvpn_config }}"
+    creates: "{{ openvpn_config }}/easyrsa"
+
+openvpn_ca:
+  - shell:   './easyrsa init-pki' # Initialize PKI directory
+    chdir:   "{{ openvpn_config }}"
+    creates: "{{ openvpn_config }}/pki"
+    executable: /bin/sh
+    notify:
+      - restart openvpn
+  - shell:   './easyrsa --batch build-ca nopass' # Build CA 
+    chdir:   "{{ openvpn_config }}"
+    creates: "{{ openvpn_config }}/pki/private/ca.key"
+    executable: /bin/sh
+    notify:
+      - restart openvpn
+
+openvpn_server:
+  # Generate the certificate request
+  - shell:      "./easyrsa --batch gen-req {{ inventory_hostname }} nopass"
+    chdir:      "{{ openvpn_config }}"
+    creates:    "{{ openvpn_config }}/pki/private/{{ inventory_hostname }}.key"
+    executable: '/bin/sh'
+    notify:
+      - restart openvpn
+  # Sign the server certificate
+  - shell:      "./easyrsa --batch sign-req server {{ inventory_hostname }}"
+    chdir:      "{{ openvpn_config }}"
+    creates:    "{{ openvpn_config }}/pki/issued/{{ inventory_hostname }}.crt"
+    executable: '/bin/sh'
+    notify:
+      - restart openvpn
+
+openvpn_dh:
+  - shell:      './easyrsa gen-dh'
+    chdir:      "{{ openvpn_config }}"
+    creates:    "{{ openvpn_config }}/pki/dh.pem"
+    executable: '/bin/sh'
+    notify:
+      - restart openvpn

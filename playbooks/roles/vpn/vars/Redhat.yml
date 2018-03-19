@@ -1,9 +1,0 @@
----
-# To be done
-openvpn_pkgs:
-  - 'openvpn'
-  - 'easy-rsa'
-  - 'opensc'
-  - 'engine_pkcs11'
-
-openvpn_service: 'openvpn'

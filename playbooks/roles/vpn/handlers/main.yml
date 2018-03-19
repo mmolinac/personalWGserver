@@ -3,5 +3,6 @@
   service: name="{{ openvpn_service }}" state=restarted
 
 - name: restart openvpn daemon-reload
-  service: name="{{ openvpn_service }}" state=restarted daemon_reload=yes
-  when: ansible_service_mgr = 'systemd'
+  command: systemctl daemon-reload
+  #service: name="{{ openvpn_service }}" state=restarted daemon_reload=yes
+  when: (ansible_service_mgr == 'systemd')

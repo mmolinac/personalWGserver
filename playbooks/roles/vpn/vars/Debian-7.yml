@@ -15,7 +15,7 @@ openvpn_templates:
     group: 'root'
     mode:  '0644'
     notify:
-      - restart openvpn daemon-reload
+      - restart openvpn
   - name:  "{{ openvpn_config }}/server.conf"
     src:   'Debian/openvpn.server.conf.j2'
     dest:  "{{ openvpn_config }}/server.conf"
@@ -31,10 +31,10 @@ openvpn_easyrsa_folder:
     creates: "{{ openvpn_config }}/pkitool"
 
 openvpn_ca:
-  - shell:   '. ./vars && ./clean-all && ./build-ca --batch'
-    chdir:   "{{ openvpn_config }}"
-    creates:   "{{ openvpn_config }}/keys/ca.key"
-    executable: /bin/sh
+  - shell:      '. ./vars && ./clean-all && ./build-ca --batch'
+    chdir:      "{{ openvpn_config }}"
+    creates:    "{{ openvpn_config }}/keys/ca.key"
+    executable: '/bin/sh'
     notify:
       - restart openvpn
 
