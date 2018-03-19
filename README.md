@@ -19,4 +19,5 @@ If you intend to test the project with the attached Vagrantfile, you'll also nee
 The features implemented so far are:
 
 - Solid base operating system: [Debian](https://www.debian.org) .
+- Compatible with other different Linux flavours like [CentOS](https://www.centos.org/) or [Ubuntu](https://www.ubuntu.com/)
 - Secure networking with [OpenVPN](https://openvpn.net/) .
