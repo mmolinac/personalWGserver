@@ -1,3 +1,4 @@
 ---
 firewall_pkgs:
+  - 'libselinux-python'
   - 'ufw'

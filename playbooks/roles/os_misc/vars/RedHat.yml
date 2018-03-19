@@ -1,6 +1,6 @@
 ---
 os_misc_pkgs:
   - 'epel-release'
-  - 'chrony'
+  - 'ntp'
 
-ntp_service: 'chronyd'
+ntp_service: 'ntpd'
