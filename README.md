@@ -21,3 +21,4 @@ The features implemented so far are:
 - Solid base operating system: [Debian](https://www.debian.org) .
 - Compatible with other different Linux flavours like [CentOS](https://www.centos.org/) or [Ubuntu](https://www.ubuntu.com/)
 - Secure networking with [OpenVPN](https://openvpn.net/) .
+- Intrusion detection with [fail2ban](https://www.fail2ban.org) .
