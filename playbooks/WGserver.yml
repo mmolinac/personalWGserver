@@ -12,7 +12,7 @@
     - 'vpn'
     # - apache2
     # - sslh
-    # - fail2ban
+    - fail2ban
     # - owncloud
     # - exim4
     # - horde

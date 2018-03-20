@@ -1,0 +1,30 @@
+---
+# How to make fail2ban compatible with UFW:
+# https://blog.vigilcode.com/2011/05/ufw-with-fail2ban-quick-secure-setup-part-ii/
+- name: Fail2ban auth error monitor
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    # Ubuntu-16, Debian-9, CentOS-6
+    - "{{ ansible_distribution }}.yml"
+    # Ubuntu, Debian, CentOS
+    - "{{ ansible_os_family }}.yml"
+    # Debian, RedHat
+    - "default.yml"
+
+- action: >
+    {{ ansible_pkg_mgr }} name={{ item }} state=latest
+  with_items: "{{ fail2ban_pkgs }}"
+
+- name: fail2ban configuration files
+  template:
+    src:   "{{ item.src }}"
+    dest:  "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode:  "{{ item.mode }}"
+  notify:  "{{ item.notify | default(omit) }}"
+  with_items: "{{ fail2ban_templates }}"
+
+- name: fail2ban service  
+  service: name="{{ fail2ban_service }}" enabled=yes state=started
