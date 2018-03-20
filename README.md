@@ -22,3 +22,4 @@ The features implemented so far are:
 - Compatible with other different Linux flavours like [CentOS](https://www.centos.org/) or [Ubuntu](https://www.ubuntu.com/)
 - Secure networking with [OpenVPN](https://openvpn.net/) .
 - Intrusion detection with [fail2ban](https://www.fail2ban.org) .
+- Secure connection multiplexing with [sslh](https://github.com/yrutschle/sslh) .

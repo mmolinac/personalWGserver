@@ -1,0 +1,15 @@
+---
+sslh_pkgs:
+  - 'sslh'
+
+sslh_service: 'sslh'
+
+sslh_templates:
+  - name:  '/etc/sslh.cfg'
+    src:   'RedHat/sslh.cfg.j2'
+    dest:  '/etc/sslh.cfg'
+    owner: 'root'
+    group: 'root'
+    mode:  '0644'
+    notify:
+      - restart sslh

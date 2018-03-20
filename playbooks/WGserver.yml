@@ -5,13 +5,15 @@
 - name: personalWGserver configuration
   hosts: all
   become: yes
+  vars_files:
+    - WGserver_vars.yml
   roles:
     - 'os_misc'
     - 'security'
     - 'firewall'
     - 'vpn'
     # - apache2
-    # - sslh
+    - sslh
     - fail2ban
     # - owncloud
     # - exim4

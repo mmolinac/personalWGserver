@@ -1,0 +1,15 @@
+---
+sslh_pkgs:
+  - 'sslh'
+
+sslh_service: 'sslh'
+
+sslh_templates:
+  - name:  '/etc/default/sslh'
+    src:   'Debian/sslh.j2'
+    dest:  '/etc/default/sslh'
+    owner: 'root'
+    group: 'root'
+    mode:  '0644'
+    notify:
+      - restart sslh

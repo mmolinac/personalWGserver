@@ -1,0 +1,26 @@
+# This is a basic configuration file that should provide
+# sensible values for "standard" setup.
+
+verbose: false;
+foreground: false;
+inetd: false;
+numeric: true;
+transparent: false;
+timeout: "5";
+user: "sslh";
+{% if not (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7') %}
+pidfile: "/var/run/sslh/sslh.pid";
+{% endif %}
+
+# Change hostname with your external address name.
+listen:
+(
+    { host: "0.0.0.0"; port: "{{ public_ssl_port }}"; }
+);
+
+protocols:
+(
+     { name: "ssh"; service: "ssh"; host: "localhost"; port: "{{ ssh_port }}"; },
+     { name: "openvpn"; host: "localhost"; port: "{{ openvpn_port }}"; },
+     { name: "ssl"; host: "localhost"; port: "{{ private_ssl_port }}"; log_level: 0; }
+);
