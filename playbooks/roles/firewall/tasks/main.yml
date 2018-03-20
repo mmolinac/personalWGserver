@@ -28,7 +28,7 @@
 
 - name: Ensure UFW allows SSH
   ufw:
-    to_port: "22"
+    to_port: "{{ ssh_port }}"
     proto:   "tcp"
     rule:    "allow"
   when: (ansible_os_family != 'RedHat')
@@ -42,6 +42,6 @@
 
 - name: Ensure UFW allows apache2
   ufw:
-    to_port: "443"
+    to_port: "{{ public_ssl_port }}"
     proto:   "tcp"
     rule:    "allow"
