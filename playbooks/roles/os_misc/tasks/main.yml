@@ -24,4 +24,3 @@
 
 - name: NTP service  
   service: name="{{ ntp_service }}" enabled=yes state=started
-  become: yes
