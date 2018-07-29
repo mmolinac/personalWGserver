@@ -13,6 +13,7 @@
 #
 # THIS:
 # Configure OpenVPN: https://openvpn.net/index.php/open-source/documentation/howto.html#install
+# Configure .ovpn file: https://community.openvpn.net/openvpn/wiki/Openvpn23ManPage
 
 - name: OpenVPN packages
   include_vars: "{{ item }}"
