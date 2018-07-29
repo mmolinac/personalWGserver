@@ -83,6 +83,8 @@ Vagrant.configure("2") do |config|
     'wgscentos6'  => ['centos/6', '192.168.5.14', 256, [ { 'guest_port': 443, 'host_port': 8446 } ] ],
     'wgscentos7'  => ['centos/7', '192.168.5.15', 256, [ { 'guest_port': 443, 'host_port': 8447 } ] ],
     'wgsubuntu14' => ['ubuntu/trusty64', '192.168.5.16', 384, [ { 'guest_port': 443, 'host_port': 8448 } ] ],
+    'wgsubuntu16' => ['ubuntu/xenial64', '192.168.5.17', 384, [ { 'guest_port': 443, 'host_port': 8449 } ] ],
+    'wgsubuntu18' => ['ubuntu/bionic64', '192.168.5.18', 384, [ { 'guest_port': 443, 'host_port': 8450 } ] ],
   }
   # Provision
   boxes_list.each do | boxhost, boxprops|
