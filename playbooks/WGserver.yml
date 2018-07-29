@@ -2,6 +2,9 @@
 #
 # Main block for personalWGserver
 #
+# PENDING. On ubuntu 16, there's no Python2, so:
+#  https://stackoverflow.com/questions/32429259/ansible-fails-with-bin-sh-1-usr-bin-python-not-found
+
 - name: personalWGserver configuration
   hosts: all
   become: yes
