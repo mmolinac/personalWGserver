@@ -77,7 +77,6 @@ Vagrant.configure("2") do |config|
   # List of boxes
   boxes_list = {
     #'hostname' => [ 'box_to_use', 'ip' , ram_size_mb, disksize ],
-    'wgsdebian7'  => ['debian/wheezy64', '192.168.5.11', 256, [ { 'guest_port': 443, 'host_port': 8443 } ] ],
     'wgsdebian8'  => ['debian/jessie64', '192.168.5.12', 256, [ { 'guest_port': 443, 'host_port': 8444 } ] ],
     'wgsdebian9'  => ['debian/stretch64', '192.168.5.13', 256, [ { 'guest_port': 443, 'host_port': 8445 } ] ],
     'wgscentos6'  => ['centos/6', '192.168.5.14', 256, [ { 'guest_port': 443, 'host_port': 8446 } ] ],
