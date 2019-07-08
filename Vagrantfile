@@ -77,13 +77,14 @@ Vagrant.configure("2") do |config|
   # List of boxes
   boxes_list = {
     #'hostname' => [ 'box_to_use', 'ip' , ram_size_mb, disksize ],
-    'wgsdebian8'  => ['debian/jessie64', '192.168.5.12', 256, [ { 'guest_port': 443, 'host_port': 8444 } ] ],
-    'wgsdebian9'  => ['debian/stretch64', '192.168.5.13', 256, [ { 'guest_port': 443, 'host_port': 8445 } ] ],
-    'wgscentos6'  => ['centos/6', '192.168.5.14', 256, [ { 'guest_port': 443, 'host_port': 8446 } ] ],
-    'wgscentos7'  => ['centos/7', '192.168.5.15', 256, [ { 'guest_port': 443, 'host_port': 8447 } ] ],
-    'wgsubuntu14' => ['ubuntu/trusty64', '192.168.5.16', 384, [ { 'guest_port': 443, 'host_port': 8448 } ] ],
-    'wgsubuntu16' => ['ubuntu/xenial64', '192.168.5.17', 384, [ { 'guest_port': 443, 'host_port': 8449 } ] ],
-    'wgsubuntu18' => ['ubuntu/bionic64', '192.168.5.18', 384, [ { 'guest_port': 443, 'host_port': 8450 } ] ],
+    'wgsdebian8'  => ['debian/jessie64', '192.168.5.12', 256, [ { 'guest_port': 443, 'host_port': 8443 } ] ],
+    'wgsdebian9'  => ['debian/stretch64', '192.168.5.13', 256, [ { 'guest_port': 443, 'host_port': 8444 } ] ],
+    'wgsdebian10' => ['debian/buster64', '192.168.5.14', 256, [ { 'guest_port': 443, 'host_port': 8445 } ] ],
+    'wgscentos6'  => ['centos/6', '192.168.5.15', 256, [ { 'guest_port': 443, 'host_port': 8446 } ] ],
+    'wgscentos7'  => ['centos/7', '192.168.5.16', 256, [ { 'guest_port': 443, 'host_port': 8447 } ] ],
+    'wgsubuntu14' => ['ubuntu/trusty64', '192.168.5.17', 384, [ { 'guest_port': 443, 'host_port': 8448 } ] ],
+    'wgsubuntu16' => ['ubuntu/xenial64', '192.168.5.18', 384, [ { 'guest_port': 443, 'host_port': 8449 } ] ],
+    'wgsubuntu18' => ['ubuntu/bionic64', '192.168.5.19', 384, [ { 'guest_port': 443, 'host_port': 8450 } ] ],
   }
   # Provision
   boxes_list.each do | boxhost, boxprops|
@@ -96,7 +97,11 @@ Vagrant.configure("2") do |config|
         # Number of CPUs for this host
         host = RbConfig::CONFIG['host_os']
         if host =~ /darwin/
-          cpus = `sysctl -n hw.ncpu`.to_i
+          if `sysctl kern.hv_support|awk '{print $2}'`.to_i > 0
+            cpus = `sysctl -n hw.ncpu`.to_i
+          else
+            cpus = 1
+          end
         elsif host =~ /linux/
           cpus = `nproc`.to_i
         else # Windows or anything else ...
