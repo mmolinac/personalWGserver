@@ -12,9 +12,9 @@
     # Debian, RedHat
     - "default.yml"
 
-- action: >
-    {{ ansible_pkg_mgr }} name={{ item }} state=latest
-  with_items: "{{ fail2ban_pkgs }}"
+- package:
+    name: "{{ fail2ban_pkgs }}"
+    state: latest
 
 - name: fail2ban configuration files
   template:

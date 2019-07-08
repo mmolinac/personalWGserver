@@ -10,9 +10,9 @@
     # Debian, RedHat
     - "default.yml"
 
-- action: >
-    {{ ansible_pkg_mgr }} name={{ item }} state=latest
-  with_items: "{{ firewall_pkgs }}"
+- package:
+    name: "{{ firewall_pkgs }}"
+    state: latest
 
 - name: Disable UFW logging
   lineinfile:

@@ -10,9 +10,10 @@
     # Debian, RedHat
     - "default.yml"
 
-- action: >
-    {{ ansible_pkg_mgr }} name={{ item }} state=latest update_cache=yes
-  with_items: "{{ os_misc_pkgs }}"
+- package:
+    name: "{{ os_misc_pkgs }}"
+    state: latest
+    update_cache: true
 
 - name: NTP service  
   service: name="{{ ntp_service }}" enabled=yes state=started

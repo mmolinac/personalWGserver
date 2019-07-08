@@ -11,9 +11,9 @@
     # Debian, RedHat
     - "default.yml"
 
-- action: >
-    {{ ansible_pkg_mgr }} name={{ item }} state=latest
-  with_items: "{{ sslh_pkgs }}"
+- package:
+    name: "{{ sslh_pkgs }}"
+    state: latest
 
 - name: sslh configuration files
   template:

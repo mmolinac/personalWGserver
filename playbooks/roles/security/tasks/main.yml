@@ -10,6 +10,6 @@
     # Debian, RedHat
     - "default.yml"
 
-- action: >
-    {{ ansible_pkg_mgr }} name={{ item }} state=latest
-  with_items: "{{ security_pkgs }}"
+- package:
+    name: "{{ security_pkgs }}"
+    state: latest
