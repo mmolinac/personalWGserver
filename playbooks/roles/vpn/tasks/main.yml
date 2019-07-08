@@ -37,11 +37,13 @@
     repo: 'deb https://build.openvpn.net/debian/openvpn/stable {{ ansible_lsb.codename }} main'
     state: present
     update_cache: yes
-  when: ( ansible_os_family == 'Debian' )
+  when: ( ansible_os_family == 'Debian' and
+          ansible_distribution_version is version_compare('10.0', operator='<', strict=True)
+          )
   
-- action: >
-    {{ ansible_pkg_mgr }} name={{ item }} state=latest
-  with_items: "{{ openvpn_pkgs }}"
+- package:
+    name: "{{ openvpn_pkgs }}"
+    state: latest
 
 - name: OpenVPN easy-rsa folder
   shell: "cp -rp {{ item.src }} {{ item.dest }}"
